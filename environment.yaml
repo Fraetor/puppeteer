@@ -1,0 +1,12 @@
+name: hacknotts23
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+- numpy
+- opencv
+- pillow
+- pandas
+- scikit-learn
+- pip
+- requests
