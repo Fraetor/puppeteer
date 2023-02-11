@@ -72,7 +72,7 @@ mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_tracking_confidence=0.5, min_detection_confidence=0.5)
 
 # Load detection model data
-with open("deadlift.pkl", "rb") as f:
+with open("body_language.pkl", "rb") as f:
     model = pickle.load(f)
 
 cap = cv2.VideoCapture(0)
@@ -116,7 +116,7 @@ def detect():
         bodylang_prob = model.predict_proba(X)[0]
         bodylang_class = model.predict(X)[0]
         if (
-            bodylang_class == "left_swipe"
+            bodylang_class == "left_head"
             and bodylang_prob[bodylang_prob.argmax()] > confidence
         ):
             if current_stage != "left":
@@ -124,7 +124,7 @@ def detect():
                 signal_keypress("left")
                 counter += 1
         elif (
-            bodylang_class == "right_swipe"
+            bodylang_class == "right_head"
             and bodylang_prob[bodylang_prob.argmax()] > confidence
         ):
             if current_stage != "right":
