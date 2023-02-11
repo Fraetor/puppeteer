@@ -205,6 +205,7 @@ class MainHandler(tornado.web.RequestHandler):
         b = self.request.body.decode("utf-8")
         if b in self.valid_keys:
             pyautogui.press(b)
+            print(f"{b} was pressed!")
             self.set_status(200)
             self.write("Completed")
         else:
