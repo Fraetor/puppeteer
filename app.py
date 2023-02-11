@@ -11,6 +11,7 @@ warnings.simplefilter("ignore", UserWarning)
 
 if len(sys.argv) < 2:
     print("Please provide the key receiver's URL as an argument.")
+    sys.exit()
 
 server_url = sys.argv[1]
 
