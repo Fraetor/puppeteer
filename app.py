@@ -9,7 +9,7 @@ from PIL import Image, ImageTk
 from landmarks import landmarks
 import requests
 
-server_url = "http://192.168.0.1"
+server_url = "http://127.0.0.1:8888"
 confidence = 0.7
 
 # Window setup
@@ -76,7 +76,7 @@ with open("deadlift.pkl", "rb") as f:
     model = pickle.load(f)
 
 cap = cv2.VideoCapture(0)
-current_stage = ""
+current_stage = "front"
 counter = 0
 bodylang_prob = np.array([0, 0])
 bodylang_class = ""
@@ -119,16 +119,20 @@ def detect():
             bodylang_class == "left_swipe"
             and bodylang_prob[bodylang_prob.argmax()] > confidence
         ):
-            current_stage = "left"
-            signal_keypress("left")
-            counter += 1
+            if current_stage != "left":
+                current_stage = "left"
+                signal_keypress("left")
+                counter += 1
         elif (
             bodylang_class == "right_swipe"
             and bodylang_prob[bodylang_prob.argmax()] > confidence
         ):
-            current_stage = "right"
-            signal_keypress("right")
-            counter += 1
+            if current_stage != "right":
+                current_stage = "right"
+                signal_keypress("right")
+                counter += 1
+        else:
+            current_stage = "front"
     except Exception as e:
         print(e)
     img = image[:, :480, :]

@@ -10,3 +10,5 @@ dependencies:
 - scikit-learn
 - pip
 - requests
+- pyautogui
+- tornado
