@@ -16,7 +16,7 @@ if len(sys.argv) < 2:
 server_url = sys.argv[1]
 
 # Load detection model data
-with open("body_language.pkl", "rb") as f:
+with open("hand_posture_2.pkl", "rb") as f:
     model = pickle.load(f)
 
 
@@ -31,11 +31,11 @@ def decide_direction(event_class, prob):
     global cooldown
     print(f"Class: {event_class}, Prob: {max(prob)}")
     cooldown -= 1
-    if max(prob) > 0.97 and cooldown < 1:
-        if event_class == "left_head":
+    if max(prob) > 0.6 and cooldown < 1:
+        if event_class == "right_hand_left_swipe":
             signal_keypress("left")
             cooldown = 10
-        elif event_class == "right_head":
+        elif event_class == "right_hand_right_swipe":
             signal_keypress("right")
             cooldown = 10
 
@@ -59,6 +59,26 @@ with mp_holistic.Holistic(
         # Export coordinates
         try:
             # Extract Pose landmarks
+            left_hand = results.left_hand_landmarks.landmark
+            left_hand_row = list(
+                np.array(
+                    [
+                        [landmark.x, landmark.y, landmark.z, landmark.visibility]
+                        for landmark in left_hand
+                    ]
+                ).flatten()
+            )
+            # Extract Face landmarks
+            right_hand = results.right_hand_landmarks.landmark
+            right_hand_row = list(
+                np.array(
+                    [
+                        [landmark.x, landmark.y, landmark.z, landmark.visibility]
+                        for landmark in right_hand
+                    ]
+                ).flatten()
+            )
+            # Pose
             pose = results.pose_landmarks.landmark
             pose_row = list(
                 np.array(
@@ -68,18 +88,8 @@ with mp_holistic.Holistic(
                     ]
                 ).flatten()
             )
-            # Extract Face landmarks
-            face = results.face_landmarks.landmark
-            face_row = list(
-                np.array(
-                    [
-                        [landmark.x, landmark.y, landmark.z, landmark.visibility]
-                        for landmark in face
-                    ]
-                ).flatten()
-            )
             # Concate rows
-            row = pose_row + face_row
+            row = left_hand_row + right_hand_row + pose_row
             # Make Detections
             X = pd.DataFrame([row])
             body_language_class = model.predict(X)[0]
@@ -147,6 +157,6 @@ with mp_holistic.Holistic(
             )
         except:
             pass
-        cv2.imshow("Raw Webcam Feed", image)
+        cv2.imshow("Puppeteer", image)
         if cv2.waitKey(10) & 0xFF == ord("q"):
             break
