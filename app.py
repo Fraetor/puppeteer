@@ -32,10 +32,10 @@ def decide_direction(event_class, prob):
     print(f"Class: {event_class}, Prob: {max(prob)}")
     cooldown -= 1
     if max(prob) > 0.6 and cooldown < 1:
-        if event_class == "right_hand_swipe_left":
+        if event_class == "left_swipe":
             signal_keypress("left")
             cooldown = 10
-        elif event_class == "right_hand_swipe_right":
+        elif event_class == "right_swipe":
             signal_keypress("right")
             cooldown = 10
 
