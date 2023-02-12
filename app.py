@@ -16,7 +16,7 @@ if len(sys.argv) < 2:
 server_url = sys.argv[1]
 
 # Load detection model data
-with open("hand_posture_2.pkl", "rb") as f:
+with open("hand_posture_3.pkl", "rb") as f:
     model = pickle.load(f)
 
 
@@ -32,10 +32,10 @@ def decide_direction(event_class, prob):
     print(f"Class: {event_class}, Prob: {max(prob)}")
     cooldown -= 1
     if max(prob) > 0.6 and cooldown < 1:
-        if event_class == "right_hand_left_swipe":
+        if event_class == "right_hand_swipe_left":
             signal_keypress("left")
             cooldown = 10
-        elif event_class == "right_hand_right_swipe":
+        elif event_class == "right_hand_swipe_right":
             signal_keypress("right")
             cooldown = 10
 
