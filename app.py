@@ -147,6 +147,6 @@ with mp_holistic.Holistic(
             )
         except:
             pass
-        cv2.imshow("Raw Webcam Feed", image)
+        cv2.imshow("Puppeteer", image)
         if cv2.waitKey(10) & 0xFF == ord("q"):
             break
